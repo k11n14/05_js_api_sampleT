@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>googleBooksAPI</title>
+</head>
+
+<body>
+
+  <h1>本検索機能</h1>
+  <div>
+    タイトル<input type="text" id="search_word" value="JS">
+  </div>
+  <!-- <div>
+    タイトル<input type="text" id="search_word" value="">
+  </div> -->
+  <button id="btn">検索</button>
+  <!-- <button id="testbtn">テストボタン</button> -->
+  <div id="output"></div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- axiosライブラリの読み込み -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script>
+
+
+    // function loadBookImage() {
+    //     var isbnCode = $("#isbn").val();
+    //     isbnCode = isbnCode.trim().toUpperCase().replace(/[^\dX]/gi, '');
+    //     var googleUrl = "https://www.googleapis.com/books/v1/volumes?q=" + isbnCode;
+    //     $.ajax({
+    //       type: "GET",
+    //       url: googleUrl,
+    //       dataType: "json"
+    //     }).done(function (json) {
+    //       var thumb = json.items[0].volumeInfo.imageLinks.thumbnail;
+    //       if (thumb) {
+    //         $("#bookImage").empty();
+    //         $("#bookImage").prepend("<img src='" + thumb + "'/>");
+    //       };
+    //     });
+    //   };
+    // $(function () {
+    //   //ボタンが押されたら入力内容をアラートで表示する
+    //   $('#btn2').click(function () {
+    //     var text = $('#idtest1').val();
+    //     alert(text);
+    //   });
+    // });
+
+
+
+  </script>
+
+  <script>
+                $("#btn").on("click", function () {
+      // alert("ok")
+
+      const search_word_text = $('#search_word').val();
+                console.log(search_word_text);
+
+                const Url =
+                "https://www.googleapis.com/books/v1/volumes?q=intitle:";
+
+                console.log(Url + search_word_text + "\"; ")
+
+                const requestUrl = (Url + search_word_text + "\"; ")
+
+                axios
+                .get(requestUrl)
+                .then(function (response) {
+                  // リクエスト成功時の処理（responseに結果が入っている）
+                  console.log(response);
+                console.log(response.data)
+                console.log(response.data.items)
+                console.log(response.data.items)
+                console.log(response.data.items.length)
+                console.log(response.data.items[0])
+                console.log(response.data.items[0].selfLink)
+                console.log(response.data.items[0].id)
+                console.log(response.data.items[0].volumeInfo)
+                console.log(response.data.items[0].volumeInfo.imageLinks.smallThumbnail)
+                console.log(response.data.items[0].volumeInfo.title)
+
+                const book_title_array = [];
+                for (let i = 0; i < response.data.items.length; i++) {
+                  book_title_array.push(`
+        <p>
+        ${response.data.items[i].volumeInfo.title}
+        </p>
+        <p>
+          <img src="${(response.data.items[i].volumeInfo.imageLinks.smallThumbnail) }" alt="!!!!!!!!">
+        </p>
+        <p>
+        <a href="http://books.google.com/books?vid=${response.data.items[i].id}">購入はこちら</a>
+        </p>
+
+        `)
+                };
+                console.log(book_title_array)
+
+          // <a href="パス名">◯◯</a>
+                $("#output").html(book_title_array)
+        })
+                .catch(function (error) {
+                  // リクエスト失敗時の処理（errorにエラー内容が入っている）
+                  console.log(error);
+        })
+                .finally(function () {
+                  // 成功失敗に関わらず必ず実行
+                  console.log("done!");
+        });
+
+    });
+
+
+  </script>
+<!-- <img src="header_logo.png" alt="!!!!!!!!"> -->
+<!-- <img src="https://books.google.com/books/content?id=75iWDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api" alt="!!!!!!!!"> -->
+
+</body>
+
+</html>
